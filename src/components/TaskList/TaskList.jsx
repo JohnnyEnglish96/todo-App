@@ -27,7 +27,7 @@ export default class TaskList extends Component {
     const elements = todoListData.map((elem) => {
       return (
         <li key={elem.id} id={elem.id} className={elem.name}>
-          <Task todoListData={elem} complited={complited} deleted={deleted} editBtn={editBtn} />
+          <Task todoListData={elem} complited={complited} deleted={deleted} editBtn={editBtn} id={elem.id} />
           <form id={elem.id} onSubmit={this.handleSubmit}>
             {elem.name === 'editing' ? (
               <input

@@ -2,11 +2,12 @@
 
 import PropTypes from 'prop-types';
 
-function Task({ todoListData, complited, deleted, editBtn }) {
+function Task({ todoListData, complited, deleted, editBtn, id }) {
+  const idName = `${id}toggle`;
   return (
     <div className="view">
-      <input className="toggle" id="toggle" type="checkbox" onClick={complited} />
-      <label htmlFor="toggle">
+      <input className="toggle" id={idName} type="checkbox" onClick={complited} />
+      <label htmlFor={idName}>
         <span className="description">{todoListData.description}</span>
         <span className="created">{todoListData.created}</span>
       </label>
