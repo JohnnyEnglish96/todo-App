@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
 import PropTypes from 'prop-types';
@@ -6,8 +5,8 @@ import PropTypes from 'prop-types';
 function Task({ todoListData, complited, deleted, editBtn }) {
   return (
     <div className="view">
-      <input className="toggle" type="checkbox" onClick={complited} />
-      <label>
+      <input className="toggle" id="toggle" type="checkbox" onClick={complited} />
+      <label htmlFor="toggle">
         <span className="description">{todoListData.description}</span>
         <span className="created">{todoListData.created}</span>
       </label>

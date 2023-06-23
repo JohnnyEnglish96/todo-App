@@ -15,9 +15,9 @@ class Footer extends Component {
     };
 
     this.clickedFilterBtn = (id) => {
+      const { selectedList } = this.props;
+      selectedList(id);
       this.setState(({ TodoFooterData }) => {
-        const { selectedList } = this.props;
-        selectedList(id);
         const newListData = JSON.parse(JSON.stringify(TodoFooterData));
         newListData.forEach((el) => {
           el.btnClassName = null;

@@ -8,15 +8,15 @@ import './TaskList.css';
 export default class TaskList extends Component {
   constructor() {
     super();
-    this.handleSubmit = (e) => {
-      e.preventDefault();
-      const { id } = e.target;
+    this.handleSubmit = (event) => {
+      event.preventDefault();
+      const { id } = event.target;
       const { submitValue } = this.props;
       submitValue(id);
     };
-    this.handleChange = (e) => {
-      const { value } = e.target;
-      const { id } = e.target;
+    this.handleChange = (event) => {
+      const { value } = event.target;
+      const { id } = event.target;
       const { editValue } = this.props;
       editValue(id, value);
     };

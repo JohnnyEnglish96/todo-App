@@ -7,18 +7,19 @@ export default class NewTaskForm extends Component {
     this.state = {
       inputValue: '',
     };
-    this.handleChange = (e) => {
+    this.handleChange = (event) => {
       const { updateTime } = this.props;
       updateTime();
       this.setState({
-        inputValue: e.target.value,
+        inputValue: event.target.value,
       });
     };
-    this.handleSubmit = (e) => {
-      e.preventDefault();
+    this.handleSubmit = (event) => {
+      event.preventDefault();
       const { addNewTask } = this.props;
       const { inputValue } = this.state;
-      addNewTask(inputValue);
+      if (!inputValue.trim()) return;
+      addNewTask(inputValue.trim());
       this.setState({
         inputValue: '',
       });
