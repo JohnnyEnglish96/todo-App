@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class TasksFilter extends Component {
+export default class FooterFilter extends Component {
   constructor() {
     super();
     this.clicked = (id) => {

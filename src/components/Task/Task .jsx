@@ -1,18 +1,23 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
+import React from 'react';
 import PropTypes from 'prop-types';
 
-function Task({ todoListData, complited, deleted, editBtn, id }) {
+import Timer from '../Timer';
+
+function Task(props) {
+  const { todoListData, deleted, editBtn, id, timerComplited, complited } = props;
+  const { description, created, name } = todoListData;
+  const checked = name === 'completed' ? name : '';
   const idName = `${id}toggle`;
   return (
     <div className="view">
-      <input className="toggle" id={idName} type="checkbox" onClick={complited} />
-      <label htmlFor={idName}>
-        <span className="description">{todoListData.description}</span>
-        <span className="created">{todoListData.created}</span>
+      <input className="toggle" id={idName} type="checkbox" onChange={() => complited(id)} checked={checked} />
+      <label htmlFor={idName} className="task-content">
+        <span className="title">{description}</span>
+        <Timer id={id} todoListData={todoListData} timerComplited={timerComplited} />
+        <span className="description">{created}</span>
       </label>
-      <button type="button" className="icon icon-edit" onClick={editBtn} />
-      <button type="button" className="icon icon-destroy" onClick={deleted} />
+      <button type="button" className="icon icon-edit" aria-label="edit" onClick={editBtn} />
+      <button type="button" className="icon icon-destroy" aria-label="destroy" onClick={deleted} />
     </div>
   );
 }
@@ -21,7 +26,6 @@ export default Task;
 
 Task.propTypes = {
   todoListData: PropTypes.object.isRequired,
-  complited: PropTypes.func.isRequired,
   deleted: PropTypes.func.isRequired,
   editBtn: PropTypes.func.isRequired,
 };

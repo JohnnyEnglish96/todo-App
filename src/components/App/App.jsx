@@ -5,15 +5,17 @@ import TaskList from '../TaskList';
 import Footer from '../Footer';
 import NewTaskForm from '../NewTaskForm';
 
-import './TodoApp.css';
+import './App.css';
 
-export default class TodoApp extends Component {
+export default class App extends Component {
   constructor() {
     super();
     this.idCount = 1;
-    this.createListItem = (description, id = this.idCount++) => {
+    this.createListItem = (description, min, sec, id = this.idCount++) => {
       return {
         description,
+        min,
+        sec,
         timeStamp: Date.now(),
         id,
         complitedBtn: false,
@@ -25,9 +27,9 @@ export default class TodoApp extends Component {
       todoListData: [],
     };
 
-    this.addNewTask = (description) => {
+    this.addNewTask = (description, min, sec) => {
       const { todoListData } = this.state;
-      const newTask = this.createListItem(description);
+      const newTask = this.createListItem(description, min, sec);
       newTask.created = formatDistanceToNow(new Date(newTask.timeStamp), {
         includeSeconds: true,
       });
@@ -35,15 +37,15 @@ export default class TodoApp extends Component {
       this.setState({ todoListData: [...newArr, newTask] });
     };
 
-    this.complited = (event) => {
+    this.complited = (id) => {
       const { todoListData } = this.state;
-      const { id } = event.target.parentElement.parentElement;
       const newListData = JSON.parse(JSON.stringify(todoListData));
       const idx = newListData.findIndex((el) => el.id === +id);
       if (newListData[idx].name === 'completed') {
         newListData[idx].activeCount = false;
       }
       let result = newListData[idx].name ? null : 'completed';
+
       if (result) {
         if (newListData[idx].active) {
           result += ' hidden';
@@ -52,6 +54,17 @@ export default class TodoApp extends Component {
         result = 'hidden';
       }
       newListData[idx].name = result;
+      this.setState({ todoListData: newListData });
+    };
+
+    this.timerComplited = (id) => {
+      const { todoListData } = this.state;
+      const newListData = JSON.parse(JSON.stringify(todoListData));
+      const idx = newListData.findIndex((el) => el.id === +id);
+      const item = newListData[idx];
+      if (!item.name || item.name === 'editing') {
+        item.name = item.active ? 'completed hidden' : 'completed';
+      }
       this.setState({ todoListData: newListData });
     };
     this.deleted = (event) => {
@@ -75,20 +88,15 @@ export default class TodoApp extends Component {
       newListData[idx].name = 'editing';
       this.setState({ todoListData: newListData });
     };
-    this.editValue = (id, value) => {
+    this.submitValue = (id, value) => {
       const { todoListData } = this.state;
       const newListData = JSON.parse(JSON.stringify(todoListData));
       const idx = newListData.findIndex((el) => el.id === +id);
-      newListData[idx].description = value;
-      this.setState({ todoListData: newListData });
-    };
-    this.submitValue = (id) => {
-      const { todoListData } = this.state;
-      const newListData = JSON.parse(JSON.stringify(todoListData));
-      const idx = newListData.findIndex((el) => el.id === +id);
-      newListData[idx].activeCount = false;
-      newListData[idx].name = newListData[idx].complited ? 'completed' : null;
-      newListData[idx].complited = !!newListData[idx].complitedBtn;
+      const item = newListData[idx];
+      item.description = value ? value.trim() : item.description;
+      item.activeCount = false;
+      item.name = item.complited ? 'completed' : null;
+      item.complited = !!item.complitedBtn;
       this.setState({ todoListData: newListData });
     };
     this.showComplitedStatus = (elem) => {
@@ -184,6 +192,7 @@ export default class TodoApp extends Component {
           <TaskList
             todoListData={todoListData}
             complited={this.complited}
+            timerComplited={this.timerComplited}
             deleted={this.deleted}
             editBtn={this.editBtn}
             editValue={this.editValue}

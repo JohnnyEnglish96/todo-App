@@ -22,7 +22,7 @@
     },
     "plugins": ["react", "import", "prettier"],
     "rules": {
-      "indent": ["error", 2],
+      "indent": ["error", 2, { "SwitchCase": 1}],
       "prettier/prettier": ["error", { "endOfLine":"auto" }],
       "linebreak-style": [0, "unix"],
       "quotes": ["error", "single"],

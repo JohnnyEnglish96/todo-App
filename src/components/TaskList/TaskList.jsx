@@ -1,46 +1,53 @@
-import { Component } from 'react';
+/* eslint-disable jsx-a11y/no-autofocus */
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Task from '../Task';
-
 import './TaskList.css';
 
 export default class TaskList extends Component {
   constructor() {
     super();
-    this.handleSubmit = (event) => {
-      event.preventDefault();
-      const { id } = event.target;
-      const { submitValue } = this.props;
-      submitValue(id);
-    };
-    this.handleChange = (event) => {
+    this.submitChange = (event) => {
       const { value } = event.target;
       const { id } = event.target;
-      const { editValue } = this.props;
-      editValue(id, value);
+      const { submitValue } = this.props;
+      if (event.code === 'Enter') {
+        if (!value.trim()) return;
+        submitValue(id, value);
+      }
+      if (event.code === 'Escape') {
+        submitValue(id, null);
+      }
     };
   }
 
   render() {
-    const { todoListData, complited, deleted, editBtn } = this.props;
+    const { todoListData, complited, deleted, editBtn, timerComplited } = this.props;
+    const { name } = todoListData;
     const elements = todoListData.map((elem) => {
       return (
         <li key={elem.id} id={elem.id} className={elem.name}>
-          <Task todoListData={elem} complited={complited} deleted={deleted} editBtn={editBtn} id={elem.id} />
-          <form id={elem.id} onSubmit={this.handleSubmit}>
-            {elem.name === 'editing' ? (
-              <input
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus
-                id={elem.id}
-                type="text"
-                className="edit"
-                value={todoListData[elem.id - 1].description}
-                onChange={this.handleChange}
-              />
-            ) : null}
-          </form>
+          <Task
+            todoListData={elem}
+            name={name}
+            complited={complited}
+            timerComplited={timerComplited}
+            deleted={deleted}
+            editBtn={editBtn}
+            id={elem.id}
+          />
+          {elem.name === 'editing' ? (
+            <input
+              autoFocus
+              ref={this.textInput}
+              id={elem.id}
+              type="text"
+              className="edit"
+              defaultValue={todoListData[elem.id - 1].description}
+              onKeyDown={this.submitChange}
+            />
+          ) : null}
         </li>
       );
     });

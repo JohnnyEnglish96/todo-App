@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import TasksFilter from '../TasksFilter';
+import FooterFilter from '../FooterFilter';
 import './Footer.css';
 
 class Footer extends Component {
@@ -59,7 +59,7 @@ class Footer extends Component {
       <footer className="footer">
         <span className="todo-count">{countLeft} items left</span>
         <ul className="filters">
-          <TasksFilter TodoFooterData={TodoFooterData} clicked={this.clickedFilterBtn} />
+          <FooterFilter TodoFooterData={TodoFooterData} clicked={this.clickedFilterBtn} />
         </ul>
         <button type="button" className="clear-completed" onClick={() => this.clickedFooterBtn(4)}>
           Clear completed
