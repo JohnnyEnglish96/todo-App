@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 import Timer from '../Timer';
 
-function Task(props) {
-  const { todoListData, deleted, editBtn, id, timerComplited, complited } = props;
+const Task = ({ todoListData, deleted, editBtn, id, timerComplited, complited }) => {
   const { description, created, name } = todoListData;
   const checked = name === 'completed' ? name : '';
   const idName = `${id}toggle`;
@@ -20,12 +19,12 @@ function Task(props) {
       <button type="button" className="icon icon-destroy" aria-label="destroy" onClick={deleted} />
     </div>
   );
-}
-
-export default Task;
+};
 
 Task.propTypes = {
   todoListData: PropTypes.object.isRequired,
   deleted: PropTypes.func.isRequired,
   editBtn: PropTypes.func.isRequired,
 };
+
+export default Task;

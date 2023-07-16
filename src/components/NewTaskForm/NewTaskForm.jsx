@@ -1,113 +1,91 @@
-import React, { Component } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import './NewTaskForm.css';
 
-export default class NewTaskForm extends Component {
-  constructor() {
-    super();
-    this.state = {
-      taskDescription: '',
-      taskMin: '',
-      taskSec: '',
-    };
-    this.textInput = React.createRef();
+const NewTaskForm = ({ addNewTask, updateTime }) => {
+  const [taskDescription, setDescription] = useState('');
+  const [taskMin, setMin] = useState('');
+  const [taskSec, setSec] = useState('');
 
-    this.handleSubmit = (event) => {
-      event.preventDefault();
-      const { addNewTask } = this.props;
-      const { taskDescription, taskMin, taskSec } = this.state;
-      const min = Math.round(taskMin);
-      const sec = Math.round(taskSec);
+  const textInput = useRef(null);
 
-      if (taskDescription.trim()) {
-        addNewTask(taskDescription, min, sec);
-      }
-      this.setState({
-        taskDescription: '',
-        taskMin: '',
-        taskSec: '',
-      });
-    };
+  const focusTextInput = () => {
+    textInput.current.focus();
+  };
 
-    this.handleChange = (event) => {
-      this.updateTime();
-      const inputValue = event.target.placeholder;
-      switch (inputValue) {
-        case 'Min':
-          this.setState({
-            taskMin: event.target.value,
-          });
-          break;
-        case 'Sec':
-          this.setState({
-            taskSec: event.target.value,
-          });
-          break;
-        default:
-          this.setState({
-            taskDescription: event.target.value,
-          });
-          break;
-      }
-    };
-  }
+  useEffect(() => {
+    focusTextInput();
+  }, []);
 
-  componentDidMount() {
-    this.focusTextInput();
-  }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const min = Math.round(taskMin);
+    const sec = Math.round(taskSec);
 
-  updateTime() {
-    const { updateTime } = this.props;
+    if (taskDescription.trim()) {
+      addNewTask(taskDescription, min, sec);
+    }
+
+    setDescription('');
+    setMin('');
+    setSec('');
+  };
+
+  const handleChange = (event) => {
     updateTime();
-  }
+    const inputValue = event.target.placeholder;
+    switch (inputValue) {
+      case 'Min':
+        setMin(event.target.value);
+        break;
+      case 'Sec':
+        setSec(event.target.value);
+        break;
+      default:
+        setDescription(event.target.value);
+        break;
+    }
+  };
 
-  focusTextInput() {
-    this.textInput.current.focus();
-  }
-
-  render() {
-    const { taskDescription, taskMin, taskSec } = this.state;
-    return (
-      <form className="new-todo-form" onSubmit={this.handleSubmit}>
-        <input
-          className="new-todo"
-          id="input1"
-          type="text"
-          placeholder="Task"
-          ref={this.textInput}
-          value={taskDescription}
-          onChange={this.handleChange}
-          required
-        />
-        <input
-          className="new-todo-form__timer"
-          id="input2"
-          type="number"
-          placeholder="Min"
-          value={taskMin}
-          onChange={this.handleChange}
-          required
-          min={0}
-          max={1440}
-        />
-        <input
-          className="new-todo-form__timer"
-          id="input3"
-          type="number"
-          placeholder="Sec"
-          value={taskSec}
-          onChange={this.handleChange}
-          min={0}
-          max={60}
-          required
-        />
-        <input className="submitForm" type="submit" />
-      </form>
-    );
-  }
-}
+  return (
+    <form className="new-todo-form" onSubmit={handleSubmit}>
+      <input
+        className="new-todo"
+        type="text"
+        placeholder="Task"
+        ref={textInput}
+        value={taskDescription}
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="new-todo-form__timer"
+        type="number"
+        placeholder="Min"
+        value={taskMin}
+        onChange={handleChange}
+        required
+        min={0}
+        max={1440}
+      />
+      <input
+        className="new-todo-form__timer"
+        type="number"
+        placeholder="Sec"
+        value={taskSec}
+        onChange={handleChange}
+        min={0}
+        max={60}
+        required
+      />
+      <input className="submitForm" type="submit" />
+    </form>
+  );
+};
 
 NewTaskForm.propTypes = {
   addNewTask: PropTypes.func.isRequired,
 };
+
+export default NewTaskForm;

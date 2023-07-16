@@ -1,24 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class FooterFilter extends Component {
-  constructor() {
-    super();
-    this.clicked = (id) => {
-      const { clicked } = this.props;
-      clicked(id);
-    };
-  }
+const FooterFilter = ({ todoFooterData, clicked }) => {
+  return todoFooterData.map((elem) => {
+    return (
+      <li key={elem.id}>
+        <button type="button" className={elem.btnClassName} onClick={() => clicked(elem.id)}>
+          {elem.btnLabel}
+        </button>
+      </li>
+    );
+  });
+};
 
-  render() {
-    const { TodoFooterData } = this.props;
-    return TodoFooterData.map((elem) => {
-      return (
-        <li key={elem.id}>
-          <button type="button" className={elem.btnClassName} onClick={() => this.clicked(elem.id)}>
-            {elem.btnLabel}
-          </button>
-        </li>
-      );
-    });
-  }
-}
+export default FooterFilter;
